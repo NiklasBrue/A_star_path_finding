@@ -1,8 +1,9 @@
+#import libraries
 import pygame as pg
 import random
-
+#import classes, functions and constants
 from a_star.board import Board
-from a_star.constants import WIDTH, HEIGHT, CUBE_SIZE, ROWS, COLS
+from a_star.constants import CUBE_SIZE, ROWS, COLS
 from a_star.algorithm import algorithm
 
 def main():
@@ -12,9 +13,9 @@ def main():
     end = None
     started = False
 
-    clock = pg.time.Clock() #define fps
+    clock = pg.time.Clock()
     
-    board = Board()
+    board = Board(ROWS, COLS, CUBE_SIZE)
     board.draw(SCREEN)
 
     while not path_is_generated:
@@ -76,9 +77,9 @@ def main():
     pg.quit()
 
 
-def main_1():
+def main_random():
     path_is_generated = False
-    board = Board()
+    board = Board(ROWS, COLS, CUBE_SIZE)
     board.array[0][0].make_start()
     start = board.array[0][0]
     board.array[ROWS-1][COLS-1].make_end()
@@ -129,9 +130,9 @@ def main_1():
 
     pg.quit()
 
-mode = input('Draw barriers or pseudo random barriers? (d/r)')
+mode = input('Draw barriers yourself or generate pseudo random barriers? (d/r)')
 
-SCREEN = pg.display.set_mode((WIDTH, HEIGHT))
+SCREEN = pg.display.set_mode((CUBE_SIZE*ROWS, CUBE_SIZE*COLS))
 pg.display.set_caption('A* Path finding')
 
 def mouse_position_to_board_position(mouse_position):
@@ -142,4 +143,4 @@ def mouse_position_to_board_position(mouse_position):
 if mode == 'd':
     main()
 else:
-    main_1()
+    main_random()

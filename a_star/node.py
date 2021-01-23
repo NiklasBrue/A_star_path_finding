@@ -4,9 +4,10 @@ from .constants import BLACK, GREEN, WHITE, BLACK,\
 
 class Node():
 
-    def __init__(self, row, col):
+    def __init__(self, row, col, CUBE_SIZE):
         self.row = row
         self.col = col
+        self.CUBE_SIZE = CUBE_SIZE
         self.x = row * CUBE_SIZE
         self.y = col * CUBE_SIZE
         self.color = WHITE
@@ -60,7 +61,7 @@ class Node():
         self.color = BLUE
 
     def draw(self, screen):
-        pg.draw.rect(screen, self.color, (self.x, self.y, CUBE_SIZE, CUBE_SIZE))
+        pg.draw.rect(screen, self.color, (self.x, self.y, self.CUBE_SIZE, self.CUBE_SIZE))
 
     def __lt__(self, other):
         return False

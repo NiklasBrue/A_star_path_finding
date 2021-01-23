@@ -2,28 +2,33 @@ import pygame as pg
 import numpy as np
 
 from .node import Node
-from .constants import CUBE_SIZE, HEIGHT, WIDTH, BLACK, WHITE, ROWS, COLS
+from .constants import BLACK, WHITE
 
 class Board():
 
-    def __init__(self):
-        self.array = np.empty((ROWS, COLS), dtype=Node)
+    def __init__(self, ROWS, COLS, CUBE_SIZE):
+        self.ROWS = ROWS
+        self.COLS = COLS
+        self.CUBE_SIZE = CUBE_SIZE
+        self.HEIGHT = self.CUBE_SIZE*self.COLS
+        self.WIDTH = self.CUBE_SIZE*self.ROWS
+        self.array = np.empty((self.ROWS, self.COLS), dtype=Node)
         self.make_board()
 
     def __repr__(self):
         return 'Board: {}'.format(self.array)
     
     def make_board(self):
-        for row in range(ROWS):
-            for col in range(COLS):
-                node = Node(row, col)
+        for row in range(self.ROWS):
+            for col in range(self.COLS):
+                node = Node(row, col, self.CUBE_SIZE)
                 self.array[row][col] = node
 
     def draw_grid_lines(self, screen):
-        for row in range(ROWS):
-            pg.draw.line(screen, BLACK, (row*CUBE_SIZE, 0), (row*CUBE_SIZE, HEIGHT))
-            for col in range(COLS):
-                pg.draw.line(screen, BLACK, (0, row*CUBE_SIZE), (WIDTH, row*CUBE_SIZE))
+        for row in range(self.ROWS+1):
+            pg.draw.line(screen, BLACK, (row*self.CUBE_SIZE, 0), (row*self.CUBE_SIZE, self.HEIGHT))
+            for col in range(self.COLS+1):
+                pg.draw.line(screen, BLACK, (0, col*self.CUBE_SIZE), (self.WIDTH, col*self.CUBE_SIZE))
 
     def draw(self, screen):
         screen.fill(WHITE)
@@ -34,9 +39,9 @@ class Board():
         pg.display.update()
 
     def reset(self, screen):
-        for row in range(ROWS):
-            for col in range(COLS):
-                node = Node(row, col)
+        for row in range(self.ROWS):
+            for col in range(self.COLS):
+                node = Node(row, col, self.CUBE_SIZE)
                 node.reset()
                 self.array[row][col] = node
 
@@ -53,10 +58,10 @@ class Board():
         neighbours = []
         if node.row > 0 and not self.array[node.row-1][node.col].is_barrier(): #SQR above
             neighbours.append(self.array[node.row-1][node.col])
-        if node.row < ROWS-1 and not self.array[node.row+1][node.col].is_barrier(): #SQR down
+        if node.row < self.ROWS-1 and not self.array[node.row+1][node.col].is_barrier(): #SQR down
             neighbours.append(self.array[node.row+1][node.col])
         if node.col > 0 and not self.array[node.row][node.col-1].is_barrier(): #SQR left
             neighbours.append(self.array[node.row][node.col-1])
-        if node.col < COLS-1 and not self.array[node.row][node.col+1].is_barrier(): #SQR right
+        if node.col < self.COLS-1 and not self.array[node.row][node.col+1].is_barrier(): #SQR right
             neighbours.append(self.array[node.row][node.col+1])
         return neighbours
